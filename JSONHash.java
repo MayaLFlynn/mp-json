@@ -10,14 +10,20 @@ public class JSONHash implements JSONValue {
   // +--------+------------------------------------------------------
   // | Fields |
   // +--------+
-  private final int INITIAL_SIZE = 16;
+  private final int INITIAL_CAPACITY = 16;
   KVPair<JSONString, JSONValue>[] contents;
+  private final double LOAD_FACTOR = 0.5;
+  int size;
+  int capacity;
+
   // +--------------+------------------------------------------------
   // | Constructors |
   // +--------------+
   @SuppressWarnings({"unchecked"})
   public JSONHash() {
-    this.contents = (KVPair<JSONString, JSONValue> []) newInstance((new KVPair<JSONString, JSONValue>()).getClass(), INITIAL_SIZE);
+    this.contents = (KVPair<JSONString, JSONValue> []) newInstance((new KVPair<JSONString, JSONValue>()).getClass(), INITIAL_CAPACITY);
+    this.size = 0;
+    this.capacity = INITIAL_CAPACITY;
   }
   // +-------------------------+-------------------------------------
   // | Standard object methods |
@@ -27,7 +33,7 @@ public class JSONHash implements JSONValue {
    * Convert to a string (e.g., for printing).
    */
   public String toString() {
-    return ""; // STUB
+    return ""; //STUB
   } // toString()
 
   /**
@@ -41,7 +47,13 @@ public class JSONHash implements JSONValue {
    * Compute the hash code.
    */
   public int hashCode() {
-    return 0; // STUB
+    int hashNum = 0;
+    for (KVPair<JSONString, JSONValue> pair : this.contents) {
+      if(pair.key() != null) {
+
+      }
+    }
+    return hashNum;
   } // hashCode()
 
   // +--------------------+------------------------------------------

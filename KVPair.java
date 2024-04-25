@@ -80,4 +80,16 @@ public class KVPair<K,V> {
   public V value() {
     return this.value;
   } // value()
+
+  /**
+   * Get the hash code.
+   * 
+   * From Professor Osera's Hashcode reading
+   */
+  public int hashCode() {
+    long result = 1091;
+    result = (31 * result + this.key.hashCode()) % Integer.MAX_VALUE;
+    result = (31 * result + this.value.hashCode()) % Integer.MAX_VALUE;
+    return (int) result;
+  }
 } // KVPair<K,V>
