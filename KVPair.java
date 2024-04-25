@@ -29,6 +29,12 @@ public class KVPair<K,V> {
     this.value = value;
   } // KVPair(K,V)
 
+  public KVPair() {
+    this.key = null;
+    this.value = null;
+  } // KVPair(K,V)
+
+
   // +------------------+--------------------------------------------
   // | Standard methods |
   // +------------------+
