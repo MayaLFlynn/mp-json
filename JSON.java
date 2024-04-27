@@ -64,6 +64,24 @@ public class JSON {
       throw new ParseException("Unexpected end of file", pos);
     }
     // STUB
+    
+    // "
+    // {
+    // [
+    // -
+    // : -> but only after a "" I think
+    // , -> but only after other things
+    // \ -> but only in a string
+    // 0123456789
+    // . -> but only after an integer
+
+    if(ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4' || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
+      
+    }
+    
+
+
+
     throw new ParseException("Unimplemented", pos);
   } // parseKernel
 

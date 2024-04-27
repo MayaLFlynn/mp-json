@@ -1,6 +1,8 @@
 import java.io.PrintWriter;
 import java.util.Iterator;
 
+//////////////////////////////////// To do:
+//////////////////////////// Investigate why getValue is returning iterator
 /**
  * JSON hashes/objects.
  * 
@@ -8,7 +10,7 @@ import java.util.Iterator;
  * @author Tim Yu
  * @author Amelia Vrieze
  */
-public class JSONHash implements JSONValue {
+public class JSONHash implements JSONValue, Iterable<KVPair<JSONString, JSONValue>> {
 
   // +--------+------------------------------------------------------
   // | Fields |
