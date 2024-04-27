@@ -224,7 +224,7 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
       @SuppressWarnings("unchecked")
       int findNextBucketIndex() throws Exception {
         int candidate;
-        for (candidate = bucket; candidate < ChainedHashTable.this.buckets.length; candidate++) {
+        for (candidate = bucket + 1; candidate < ChainedHashTable.this.buckets.length; candidate++) {
           Object candidateBucket = ChainedHashTable.this.buckets[candidate];
           if (candidateBucket != null
               && !((ArrayList<KVPair<K,V>>) candidateBucket).isEmpty()) {
