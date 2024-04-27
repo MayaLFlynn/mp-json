@@ -13,6 +13,10 @@ public class JSONArray implements JSONValue {
 
   /**
    * The underlying array.
+   * 
+   * @author Maya Flynn
+   * @author Tim Yu
+   * @author Amelia Vrieze
    */
   ArrayList<JSONValue> values;
 
@@ -25,7 +29,7 @@ public class JSONArray implements JSONValue {
    */
   public JSONArray() {
     this.values = new ArrayList<JSONValue>();
-  } // JSONArray() 
+  } // JSONArray()
 
   // +-------------------------+-------------------------------------
   // | Standard object methods |
@@ -60,7 +64,7 @@ public class JSONArray implements JSONValue {
    * Write the value as JSON.
    */
   public void writeJSON(PrintWriter pen) {
-      pen.print(this.values.toString());
+    pen.print(this.values.toString());
   } // writeJSON(PrintWriter)
 
   /**

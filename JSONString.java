@@ -2,6 +2,10 @@ import java.io.PrintWriter;
 
 /**
  * JSON strings.
+ * 
+ * @author Maya Flynn
+ * @author Tim Yu
+ * @author Amelia Vrieze
  */
 public class JSONString implements JSONValue {
 
@@ -33,7 +37,7 @@ public class JSONString implements JSONValue {
    * Convert to a string (e.g., for printing).
    */
   public String toString() {
-    return this.value.toString(); 
+    return this.value.toString();
   } // toString()
 
   /**

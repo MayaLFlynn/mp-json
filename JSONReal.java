@@ -12,6 +12,10 @@ public class JSONReal implements JSONValue {
 
   /**
    * The underlying double.
+   * 
+   * @author Maya Flynn
+   * @author Tim Yu
+   * @author Amelia Vrieze
    */
   BigDecimal value;
 
