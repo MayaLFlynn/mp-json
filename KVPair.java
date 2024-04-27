@@ -1,5 +1,7 @@
 /**
  * Simple, immutable, key/value pairs
+ * 
+ * @author Sam Rebelsky
  */
 public class KVPair<K,V> {
 
