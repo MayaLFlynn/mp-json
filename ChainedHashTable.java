@@ -1,12 +1,12 @@
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
 //////////////////////Things to fix:
 ///////////// Fix containsKey to be better.
-///////////// Make an iterator
 
 /**
  * A simple implementation of hash tables.
@@ -181,16 +181,58 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
    * Iterate the key/value pairs in some order.
    */
   public Iterator<KVPair<K,V>> iterator() {
+    // KVPair<K,V> next;
+    
     return new Iterator<KVPair<K,V>>() {
+      int bucket = 0;
+      int bucketAlistIndex = 0;
+
+      @SuppressWarnings("unchecked")
       public boolean hasNext() {
-        // STUB
-        return false;
+        if (ChainedHashTable.this.buckets[bucket] != null
+            && bucketAlistIndex < ((ArrayList<KVPair<K,V>>) ChainedHashTable.this.buckets[bucket]).size()) {
+          return true;
+        }
+        // Otherwise, we try to find the next bucket
+        try {
+          findNextBucketIndex();
+          return true;
+        } catch (Exception e) {
+          return false;
+        }
       } // hasNext()
 
+      @SuppressWarnings("unchecked")
       public KVPair<K,V> next() {
-        // STUB
-        return null;
+        if (ChainedHashTable.this.buckets[bucket] != null
+            && bucketAlistIndex < ((ArrayList<KVPair<K,V>>) ChainedHashTable.this.buckets[bucket]).size()) {
+          KVPair<K,V> toReturn = ((ArrayList<KVPair<K,V>>) ChainedHashTable.this.buckets[bucket]).get(bucketAlistIndex);
+          bucketAlistIndex++;
+          return toReturn;
+        }
+        try {
+          bucket = findNextBucketIndex();
+          bucketAlistIndex = 0;
+          KVPair<K,V> toReturn = ((ArrayList<KVPair<K,V>>) ChainedHashTable.this.buckets[bucket]).get(bucketAlistIndex);
+          bucketAlistIndex++;
+          return toReturn;
+        } catch (Exception e) {
+          throw new NoSuchElementException();
+        }
       } // next()
+
+      @SuppressWarnings("unchecked")
+      int findNextBucketIndex() throws Exception {
+        int candidate;
+        for (candidate = bucket; candidate < ChainedHashTable.this.buckets.length; candidate++) {
+          Object candidateBucket = ChainedHashTable.this.buckets[candidate];
+          if (candidateBucket != null
+              && !((ArrayList<KVPair<K,V>>) candidateBucket).isEmpty()) {
+            return candidate;
+          }
+        }
+        throw new Exception("no more buckets");
+      }
     }; // new Iterator
   } // iterator()
 
