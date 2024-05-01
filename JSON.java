@@ -77,24 +77,17 @@ public class JSON {
 
     if (ch == '{') {
       JSONHash hash = new JSONHash();
-      String str = "";
-      ch = source.read();
-      pos++;
       while (ch != '}') {
-        str += ch;
-        ch = source.read();
+        JSONString key = (JSONString) parse(source);
+        JSONValue value = parse(source);
+        hash.set(key, value);
+        ch = source.read(); //I think this is eating a character
         pos++;
-      }
-      String[] arr = str.split(","); //this doesn't work because of arrays but idk what else to do
-      for (String value : arr) {
-        String k = value.substring(0, value.indexOf(':'));
-        String v = value.substring(value.indexOf(':'));
-        hash.set((JSONString) parse(k), parse(v));
       }
     } else if(ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4' || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
       String str = "";
       boolean real = false;
-      while (ch != -1) {
+      while (ch != ',' && ch != '}') { //Not right; how to stop the Reader from eating the last brace?
         if (ch == '.') {
           real = true;
         }
@@ -117,6 +110,8 @@ public class JSON {
       }
       return new JSONString(str);
     } 
+
+    //still need to try arrays and constants
 
 
 
