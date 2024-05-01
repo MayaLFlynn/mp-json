@@ -88,7 +88,8 @@ public class JSON {
       ch = skipWhitespace(source);
       pushBrace(ch);
       return hash;
-    } else if (ch == '-' || (ch >= '0' && ch <= '9')) { // If a new number (JSONInteger or JSONReal) is starting
+    } else if (ch == '-' || (ch >= '0' && ch <= '9')) { // If a new number (JSONInteger or JSONReal)
+                                                        // is starting
       StringBuilder str = new StringBuilder();
       boolean real = false;
       while (ch != ',' && ch != '}' && ch != ']') {
@@ -127,22 +128,29 @@ public class JSON {
       pushBrace(ch);
       return array;
     } else if (ch == 't') { // if the JSONConstant 'true' is starting
-      while (Character.isLetter((char) ch)) {
-        ch = skipWhitespace(source);
-      }
+      isConstant(ch, 'r', source);
+      isConstant(ch, 'u', source);
+      isConstant(ch, 'e', source);
+      ch = skipWhitespace(source);
       pushBrace(ch);
+
       return JSONConstant.TRUE;
     } else if (ch == 'f') { // if the JSONConstant 'false' is starting
-      while (Character.isLetter((char) ch)) {
-        ch = skipWhitespace(source);
-      }
+      isConstant(ch, 'a', source);
+      isConstant(ch, 'l', source);
+      isConstant(ch, 's', source);
+      isConstant(ch, 'e', source);
+      ch = skipWhitespace(source);
       pushBrace(ch);
+
       return JSONConstant.FALSE;
     } else if (ch == 'n') { // if the JSONConstant 'null' is starting
-      while (Character.isLetter((char) ch)) {
-        ch = skipWhitespace(source);
-      }
+      isConstant(ch, 'u', source);
+      isConstant(ch, 'l', source);
+      isConstant(ch, 'l', source);
+      ch = skipWhitespace(source);
       pushBrace(ch);
+
       return JSONConstant.NULL;
     } else if (ch == ',') { // if there is a ',' comma seperating objects
       skipWhitespace(source);
@@ -150,6 +158,14 @@ public class JSON {
     }
     throw new ParseException("Unexpected character", pos);
   } // parseKernel
+
+
+  private static void isConstant(int ch, int expected, Reader source)
+      throws ParseException, IOException {
+    ch = skipWhitespace(source);
+    if (ch != expected)
+      throw new ParseException("Unexpected value", ch);
+  } // isConstant
 
 
   /**
