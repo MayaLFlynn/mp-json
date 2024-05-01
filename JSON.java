@@ -3,6 +3,13 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.ParseException;
+import java.util.Stack;
+
+/* TO DO:
+ * -Constants should actually check to see if they are the right words
+ * -Error checking: braces and brackets should match each other in the stack (check when pushing)
+ * -Literally everything else
+ */
 
 /**
  * Utilities for our simple implementation of JSON.
@@ -21,6 +28,8 @@ public class JSON {
    * saving a character that was read but not used
    */
   static int cached;
+
+  static Stack<Integer> stack = new Stack<Integer>();
 
   // +----------------+----------------------------------------------
   // | Static methods |
@@ -48,6 +57,7 @@ public class JSON {
    */
   public static JSONValue parse(Reader source) throws ParseException, IOException {
     pos = 0;
+    stack.push(-1);
     JSONValue result = parseKernel(source);
     if (-1 != skipWhitespace(source)) {
       throw new ParseException("Characters remain at end", pos);
@@ -81,54 +91,95 @@ public class JSON {
     // . -> but only after an integer
 
     if (ch == '{') {
+      stack.push(ch);
       JSONHash hash = new JSONHash();
-      while (cached != '}') {
-        JSONString key = (JSONString) parse(source);
-        skipWhitespace(source);
-        JSONValue value = parse(source);
+      while (stack.peek() != '}') {
+        JSONString key = (JSONString) parseKernel(source);
+        JSONValue value = parseKernel(source);
         hash.set(key, value);
       }
-      cached = -1;
+      stack.pop();
+      stack.pop();
+      ch = skipWhitespace(source);
+      if (ch == ']' || ch == '}') {
+        stack.push(ch);
+      }
+      return hash;
     } else if (ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4'
         || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
-      String str = "";
+      StringBuilder str = new StringBuilder();
       boolean real = false;
-      while (ch != ',' && ch != '}') {
+      while (ch != ',' && ch != '}' && ch != ']') {
         if (ch == '.') {
           real = true;
         }
-        str += ch;
+        str.append((char) ch);
         ch = skipWhitespace(source);
       }
-      if (ch == '}') {
-        cached = ch;
+      if (ch == '}' || ch == ']') { 
+        stack.push(ch);
       }
       if (real == true) {
-        return new JSONReal(str);
-        // can BigDecimal parse strings where the number is in scientific notation?
+        return new JSONReal(str.toString());
       }
-      return new JSONInteger(str);
+      return new JSONInteger(str.toString());
 
     } else if (ch == '\"') {
-      String str = "";
+      StringBuilder str = new StringBuilder();
+      ch = skipWhitespace(source);
       while (ch != '\"') {
-        str += ch;
+        str.append((char) ch);
         ch = source.read();
         pos++;
       }
-      return new JSONString(str);
+      ch = skipWhitespace(source);
+      if (ch == ']' || ch == '}') {
+        stack.push(ch);
+      }
+      return new JSONString(str.toString());
     } else if (ch == '[') {
+      stack.push(ch);
       JSONArray array = new JSONArray();
-      while (cached != ']') {
-        JSONValue value = parse(source);
-        if (skipWhitespace(source) == ']') {
-          break;
-        }
+      while (stack.peek() != ']') {
+        JSONValue value = parseKernel(source);
         array.add(value);
       } // while
-      cached = -1;
-    } 
-    // still need to try arrays and constants
+      stack.pop();
+      stack.pop();
+      ch = skipWhitespace(source);
+      if (ch == ']' || ch == '}') {
+        stack.push(ch);
+      }
+      return array;
+    } else if (ch == 't') {
+      while (Character.isLetter((char) ch)) {
+        ch = skipWhitespace(source);
+      }
+      if (ch == ']' || ch == '}') {
+        stack.push(ch);
+      }
+      return JSONConstant.TRUE;
+    } else if (ch == 'f') {
+      while (Character.isLetter((char) ch)) {
+        ch = skipWhitespace(source);
+      }
+      if (ch == ']' || ch == '}') {
+        stack.push(ch);
+      }
+      return JSONConstant.FALSE;
+    } else if (ch == 'n') {
+      while (Character.isLetter((char) ch)) {
+        ch = skipWhitespace(source);
+      }
+      if (ch == ']' || ch == '}') {
+        stack.push(ch);
+      }
+      return JSONConstant.NULL;
+    } else if (ch == ',') {
+      skipWhitespace(source);
+      return parseKernel(source);
+    }
+
 
 
 

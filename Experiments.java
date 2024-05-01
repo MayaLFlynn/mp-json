@@ -39,6 +39,7 @@ public class Experiments {
    */
   public static void parseExpt() throws Exception {
     Reader fr = new FileReader(new File("test.json"));
+    //Reader fr = new FileReader(new File("stringTest.txt"));
     JSONValue value = JSON.parse(fr);
     value.writeJSON(pen);
   }

@@ -68,6 +68,7 @@ public class JSONHash implements JSONValue, Iterable<KVPair<JSONString, JSONValu
       }
     }
     pen.print("}");
+    pen.flush();
 
   } // writeJSON(PrintWriter)
 
