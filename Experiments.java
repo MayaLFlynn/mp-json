@@ -1,4 +1,7 @@
+import java.io.File;
+import java.io.FileReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.Iterator;
 
 public class Experiments {
@@ -31,7 +34,17 @@ public class Experiments {
     pen.println();
   }
 
-  public static void main(String[] args) {
-    iteratorExpt();
+  /**
+   * Test parsing JSON
+   */
+  public static void parseExpt() throws Exception {
+    Reader fr = new FileReader(new File("test.json"));
+    JSONValue value = JSON.parse(fr);
+    value.writeJSON(pen);
+  }
+
+  public static void main(String[] args) throws Exception {
+    // iteratorExpt();
+    parseExpt();
   }
 }

@@ -1,0 +1,25 @@
+{
+  "key1"  : "value1",
+  "key2"  : "value2\n",
+  "key3"  : 3.14159,
+  "key4"  : 4.25e3,
+  "key5"  : 500,
+  "key6"  : -65536,
+  "key7"  : true,
+  "key8"  : false,
+  "key9"  : null,
+  "key10" : [
+    1,
+    2,
+    {
+      "key10a" : "value10a"
+    },
+    4,
+    5
+  ],
+  "key11" : {
+    "key11a" : "value11a",
+    "key11b" : "value11b"
+  },
+  "key12" : "value12"
+}
