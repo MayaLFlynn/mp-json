@@ -5,9 +5,6 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-//////////////////////Things to fix:
-///////////// Fix containsKey to be better.
-
 /**
  * A simple implementation of hash tables.
  *
@@ -71,7 +68,6 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
    * Determine if the hash table contains a particular key.
    */
   public boolean containsKey(K key) {
-    // STUB/HACK
     try {
       get(key);
       return true;
@@ -138,8 +134,8 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
       if(alist.get(i).key().equals(key)) {
         alist.set(i, new KVPair<K,V>(key, value));
         return value;
-      }
-    }
+      } // if
+    } // for
     alist.add(new KVPair<K,V>(key, value));
     ++this.size;
 
@@ -169,7 +165,7 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
     for (KVPair<K,V> pair : this) {
       result += pair.hashCode();
       result = result % Integer.MAX_VALUE;
-    }
+    } // for
     return (int) result;
   } // hashCode()
 
@@ -192,14 +188,14 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
         if (ChainedHashTable.this.buckets[bucket] != null
             && bucketAlistIndex < ((ArrayList<KVPair<K,V>>) ChainedHashTable.this.buckets[bucket]).size()) {
           return true;
-        }
+        } // if
         // Otherwise, we try to find the next bucket
         try {
           findNextBucketIndex();
           return true;
         } catch (Exception e) {
           return false;
-        }
+        } // try catch
       } // hasNext()
 
       @SuppressWarnings("unchecked")
@@ -209,7 +205,7 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
           KVPair<K,V> toReturn = ((ArrayList<KVPair<K,V>>) ChainedHashTable.this.buckets[bucket]).get(bucketAlistIndex);
           bucketAlistIndex++;
           return toReturn;
-        }
+        } // try catch
         try {
           bucket = findNextBucketIndex();
           bucketAlistIndex = 0;
@@ -218,7 +214,7 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
           return toReturn;
         } catch (Exception e) {
           throw new NoSuchElementException();
-        }
+        } // try catch
       } // next()
 
       @SuppressWarnings("unchecked")
@@ -229,10 +225,10 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
           if (candidateBucket != null
               && !((ArrayList<KVPair<K,V>>) candidateBucket).isEmpty()) {
             return candidate;
-          }
-        }
+          } // if
+        } // for
         throw new Exception("no more buckets");
-      }
+      } // findNextBucketIndex()
     }; // new Iterator
   } // iterator()
 
@@ -291,9 +287,9 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
         // rehash each element and set to right place
         for (KVPair<K,V> p : alist) {
           this.set(p.key(), p.value());
-        }
-      }
-    }
+        } // for
+      } // if
+    } // for
   } // expand()
 
   /**

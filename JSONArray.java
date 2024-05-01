@@ -3,7 +3,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * JSON arrays.
+ * JSON arrays
+ * 
+ * @author Maya Flynn
+ * @author Tim Yu
+ * @author Amelia Vrieze
  */
 public class JSONArray implements JSONValue {
 
@@ -13,10 +17,6 @@ public class JSONArray implements JSONValue {
 
   /**
    * The underlying array.
-   * 
-   * @author Maya Flynn
-   * @author Tim Yu
-   * @author Amelia Vrieze
    */
   ArrayList<JSONValue> values;
 
@@ -68,7 +68,7 @@ public class JSONArray implements JSONValue {
     for (JSONValue val : this.values) {
       val.writeJSON(pen);
       pen.print(", ");
-    }
+    } // for
     pen.print("\b\b]");
     pen.flush();
   } // writeJSON(PrintWriter)

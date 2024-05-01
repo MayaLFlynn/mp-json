@@ -3,6 +3,10 @@ import java.math.BigDecimal;
 
 /**
  * JSON reals.
+ * 
+ * @author Maya Flynn
+ * @author Tim Yu
+ * @author Amelia Vrieze
  */
 public class JSONReal implements JSONValue {
 
@@ -12,10 +16,6 @@ public class JSONReal implements JSONValue {
 
   /**
    * The underlying double.
-   * 
-   * @author Maya Flynn
-   * @author Tim Yu
-   * @author Amelia Vrieze
    */
   BigDecimal value;
 

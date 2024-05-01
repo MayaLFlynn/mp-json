@@ -2,8 +2,11 @@
  * Simple, immutable, key/value pairs
  * 
  * @author Sam Rebelsky
+ * @author Maya Flynn
+ * @author Tim Yu
+ * @author Amelia Vrieze
  */
-public class KVPair<K,V> {
+public class KVPair<K, V> {
 
   // +--------+------------------------------------------------------
   // | Fields |
@@ -47,13 +50,13 @@ public class KVPair<K,V> {
   @SuppressWarnings("unchecked")
   @Override
   public boolean equals(Object other) {
-    return ((other instanceof KVPair) && (this.equals((KVPair<K,V>) other)));
+    return ((other instanceof KVPair) && (this.equals((KVPair<K, V>) other)));
   } // equals(Object)
 
   /**
    * Compare for equality.
    */
-  public boolean equals(KVPair<K,V> other) {
+  public boolean equals(KVPair<K, V> other) {
     return ((this.key.equals(other.key)) && (this.value.equals(other.value)));
   } // equals(KVPair<K,V>)
 
@@ -93,5 +96,5 @@ public class KVPair<K,V> {
     result = (31 * result + this.key.hashCode()) % Integer.MAX_VALUE;
     result = (31 * result + this.value.hashCode()) % Integer.MAX_VALUE;
     return (int) result;
-  }
+  } // hashCode()
 } // KVPair<K,V>

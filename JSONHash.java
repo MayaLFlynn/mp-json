@@ -1,8 +1,6 @@
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-//////////////////////////////////// To do:
-//////////////////////////// Investigate why getValue is returning iterator
 /**
  * JSON hashes/objects.
  * 
@@ -15,11 +13,17 @@ public class JSONHash implements JSONValue, Iterable<KVPair<JSONString, JSONValu
   // +--------+------------------------------------------------------
   // | Fields |
   // +--------+
-  ChainedHashTable<JSONString, JSONValue> contents; 
+  /**
+   * The underlying Hash Table
+   */
+  ChainedHashTable<JSONString, JSONValue> contents;
 
   // +--------------+------------------------------------------------
   // | Constructors |
   // +--------------+
+  /**
+   * Creates a new JSONHash by setting it to an empty hash table
+   */
   public JSONHash() {
     this.contents = new ChainedHashTable<JSONString, JSONValue>();
   }
@@ -46,7 +50,7 @@ public class JSONHash implements JSONValue, Iterable<KVPair<JSONString, JSONValu
    */
   public int hashCode() {
     return this.contents.hashCode();
-  } // hashCode() 
+  } // hashCode()
 
   // +--------------------+------------------------------------------
   // | Additional methods |
@@ -65,11 +69,10 @@ public class JSONHash implements JSONValue, Iterable<KVPair<JSONString, JSONValu
       pair.value().writeJSON(pen);
       if (contentsIter.hasNext()) {
         pen.print(", ");
-      }
-    }
+      } // if
+    } // while
     pen.print("}");
     pen.flush();
-
   } // writeJSON(PrintWriter)
 
   /**

@@ -5,11 +5,14 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.util.Stack;
 
-
-
 /**
  * Utilities for our simple implementation of JSON.
+ * 
+ * @author Maya Flynn
+ * @author Tim Yu
+ * @author Amelia Vrieze
  */
+
 public class JSON {
   // +---------------+-----------------------------------------------
   // | Static fields |
@@ -21,10 +24,8 @@ public class JSON {
   static int pos;
 
   /**
-   * saving a character that was read but not used
+   * Saving the braces that have not yet closed
    */
-  static int cached;
-
   static Stack<Integer> stack = new Stack<Integer>();
 
   // +----------------+----------------------------------------------
@@ -74,66 +75,46 @@ public class JSON {
     if (-1 == ch) {
       throw new ParseException("Unexpected end of file", pos);
     }
-    // STUB
-
-    // "
-    // {
-    // [
-    // -
-    // : -> but only after a "" I think
-    // , -> but only after other things
-    // \ -> but only in a string
-    // 0123456789
-    // . -> but only after an integer
-
-    if (ch == '{') {
+    if (ch == '{') { // If a new JSON Hash is starting
       stack.push(ch);
       JSONHash hash = new JSONHash();
       while (stack.peek() != '}') {
         JSONString key = (JSONString) parseKernel(source);
         JSONValue value = parseKernel(source);
         hash.set(key, value);
-      }
+      } // while
       stack.pop();
       stack.pop();
       ch = skipWhitespace(source);
-      if (ch == ']' || ch == '}') {
-        stack.push(ch);
-      }
+      pushBrace(ch);
       return hash;
-    } else if (ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4'
-        || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
+    } else if (ch == '-' || (ch >= '0' && ch <= '9')) { // If a new number (JSONInteger or JSONReal) is starting
       StringBuilder str = new StringBuilder();
       boolean real = false;
       while (ch != ',' && ch != '}' && ch != ']') {
         if (ch == '.') {
           real = true;
-        }
+        } // if
         str.append((char) ch);
         ch = skipWhitespace(source);
-      }
-      if (ch == '}' || ch == ']') { 
-        stack.push(ch);
-      }
+      } // while
+      pushBrace(ch);
       if (real == true) {
         return new JSONReal(str.toString());
-      }
+      } // if
       return new JSONInteger(str.toString());
-
-    } else if (ch == '\"') {
+    } else if (ch == '\"') { // If a new JSONString is starting
       StringBuilder str = new StringBuilder();
       ch = skipWhitespace(source);
       while (ch != '\"') {
         str.append((char) ch);
         ch = source.read();
         pos++;
-      }
+      } // while
       ch = skipWhitespace(source);
-      if (ch == ']' || ch == '}') {
-        stack.push(ch);
-      }
+      pushBrace(ch);
       return new JSONString(str.toString());
-    } else if (ch == '[') {
+    } else if (ch == '[') { // If a new JSONArray is starting
       stack.push(ch);
       JSONArray array = new JSONArray();
       while (stack.peek() != ']') {
@@ -143,44 +124,54 @@ public class JSON {
       stack.pop();
       stack.pop();
       ch = skipWhitespace(source);
-      if (ch == ']' || ch == '}') {
-        stack.push(ch);
-      }
+      pushBrace(ch);
       return array;
-    } else if (ch == 't') {
+    } else if (ch == 't') { // if the JSONConstant 'true' is starting
       while (Character.isLetter((char) ch)) {
         ch = skipWhitespace(source);
       }
-      if (ch == ']' || ch == '}') {
-        stack.push(ch);
-      }
+      pushBrace(ch);
       return JSONConstant.TRUE;
-    } else if (ch == 'f') {
+    } else if (ch == 'f') { // if the JSONConstant 'false' is starting
       while (Character.isLetter((char) ch)) {
         ch = skipWhitespace(source);
       }
-      if (ch == ']' || ch == '}') {
-        stack.push(ch);
-      }
+      pushBrace(ch);
       return JSONConstant.FALSE;
-    } else if (ch == 'n') {
+    } else if (ch == 'n') { // if the JSONConstant 'null' is starting
       while (Character.isLetter((char) ch)) {
         ch = skipWhitespace(source);
       }
-      if (ch == ']' || ch == '}') {
-        stack.push(ch);
-      }
+      pushBrace(ch);
       return JSONConstant.NULL;
-    } else if (ch == ',') {
+    } else if (ch == ',') { // if there is a ',' comma seperating objects
       skipWhitespace(source);
       return parseKernel(source);
     }
-
-
-
-
-    throw new ParseException("Unimplemented", pos);
+    throw new ParseException("Unexpected character", pos);
   } // parseKernel
+
+
+  /**
+   * Determines if the character is a closed brace, and if it is, it pushes it to the stack
+   */
+  private static void pushBrace(int ch) throws ParseException {
+    if (ch == '}') {
+      if (stack.peek() == '{') {
+        stack.push(ch);
+      } else {
+        throw new ParseException("Unexpected closed brace", pos);
+      } // if
+    } // if {}
+
+    if (ch == ']') {
+      if (stack.peek() == '[') {
+        stack.push(ch);
+      } else {
+        throw new ParseException("Unexpected closed brace", pos);
+      } // if
+    } // if []
+  } // pushBrace(int)
 
   /**
    * Get the next character from source, skipping over whitespace.
