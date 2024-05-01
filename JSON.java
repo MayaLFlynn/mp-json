@@ -69,7 +69,7 @@ public class JSON {
       throw new ParseException("Unexpected end of file", pos);
     }
     // STUB
-    
+
     // "
     // {
     // [
@@ -85,42 +85,50 @@ public class JSON {
       while (cached != '}') {
         JSONString key = (JSONString) parse(source);
         skipWhitespace(source);
-        pos++;
         JSONValue value = parse(source);
         hash.set(key, value);
       }
       cached = -1;
-    } else if(ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4' || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
+    } else if (ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4'
+        || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
       String str = "";
       boolean real = false;
-      while (ch != ',' && ch != '}') { 
+      while (ch != ',' && ch != '}') {
         if (ch == '.') {
           real = true;
         }
-        str+= ch;
+        str += ch;
         ch = skipWhitespace(source);
-        pos++;
       }
       if (ch == '}') {
         cached = ch;
       }
       if (real == true) {
         return new JSONReal(str);
-        //can BigDecimal parse strings where the number is in scientific notation?
+        // can BigDecimal parse strings where the number is in scientific notation?
       }
       return new JSONInteger(str);
-    
+
     } else if (ch == '\"') {
       String str = "";
       while (ch != '\"') {
-        str+= ch;
+        str += ch;
         ch = source.read();
         pos++;
       }
       return new JSONString(str);
+    } else if (ch == '[') {
+      JSONArray array = new JSONArray();
+      while (cached != ']') {
+        JSONValue value = parse(source);
+        if (skipWhitespace(source) == ']') {
+          break;
+        }
+        array.add(value);
+      } // while
+      cached = -1;
     } 
-
-    //still need to try arrays and constants
+    // still need to try arrays and constants
 
 
 
@@ -140,8 +148,7 @@ public class JSON {
   } // skipWhitespace(Reader)
 
   /**
-   * Determine if a character is JSON whitespace (newline, carriage return,
-   * space, or tab).
+   * Determine if a character is JSON whitespace (newline, carriage return, space, or tab).
    */
   static boolean isWhitespace(int ch) {
     return (' ' == ch) || ('\n' == ch) || ('\r' == ch) || ('\t' == ch);
