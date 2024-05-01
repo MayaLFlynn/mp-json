@@ -5,11 +5,7 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.util.Stack;
 
-/* TO DO:
- * -Constants should actually check to see if they are the right words
- * -Error checking: braces and brackets should match each other in the stack (check when pushing)
- * -Literally everything else
- */
+
 
 /**
  * Utilities for our simple implementation of JSON.
