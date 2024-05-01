@@ -75,10 +75,48 @@ public class JSON {
     // 0123456789
     // . -> but only after an integer
 
-    if(ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4' || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
-      
-    }
+    if (ch == '{') {
+      JSONHash hash = new JSONHash();
+      String str = "";
+      ch = source.read();
+      pos++;
+      while (ch != '}') {
+        str += ch;
+        ch = source.read();
+        pos++;
+      }
+      String[] arr = str.split(","); //this doesn't work because of arrays but idk what else to do
+      for (String value : arr) {
+        String k = value.substring(0, value.indexOf(':'));
+        String v = value.substring(value.indexOf(':'));
+        hash.set((JSONString) parse(k), parse(v));
+      }
+    } else if(ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4' || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
+      String str = "";
+      boolean real = false;
+      while (ch != -1) {
+        if (ch == '.') {
+          real = true;
+        }
+        str+= ch;
+        ch = source.read();
+        pos++;
+      }
+      if (real == true) {
+        return new JSONReal(str);
+        //can BigDecimal parse strings where the number is in scientific notation?
+      }
+      return new JSONInteger(str);
     
+    } else if (ch == '\"') {
+      String str = "";
+      while (ch != '\"') {
+        str+= ch;
+        ch = source.read();
+        pos++;
+      }
+      return new JSONString(str);
+    } 
 
 
 
