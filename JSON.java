@@ -17,6 +17,11 @@ public class JSON {
    */
   static int pos;
 
+  /**
+   * saving a character that was read but not used
+   */
+  static int cached;
+
   // +----------------+----------------------------------------------
   // | Static methods |
   // +----------------+
@@ -77,23 +82,27 @@ public class JSON {
 
     if (ch == '{') {
       JSONHash hash = new JSONHash();
-      while (ch != '}') {
+      while (cached != '}') {
         JSONString key = (JSONString) parse(source);
+        source.read();
+        pos++;
         JSONValue value = parse(source);
         hash.set(key, value);
-        ch = source.read(); //I think this is eating a character
-        pos++;
       }
+      cached = -1;
     } else if(ch == '-' || ch == '0' || ch == '1' || ch == '2' || ch == '3' || ch == '4' || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9') {
       String str = "";
       boolean real = false;
-      while (ch != ',' && ch != '}') { //Not right; how to stop the Reader from eating the last brace?
+      while (ch != ',' && ch != '}') { 
         if (ch == '.') {
           real = true;
         }
         str+= ch;
         ch = source.read();
         pos++;
+      }
+      if (ch == '}') {
+        cached = ch;
       }
       if (real == true) {
         return new JSONReal(str);
