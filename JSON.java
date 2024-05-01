@@ -84,7 +84,7 @@ public class JSON {
       JSONHash hash = new JSONHash();
       while (cached != '}') {
         JSONString key = (JSONString) parse(source);
-        source.read();
+        skipWhitespace(source);
         pos++;
         JSONValue value = parse(source);
         hash.set(key, value);
@@ -98,7 +98,7 @@ public class JSON {
           real = true;
         }
         str+= ch;
-        ch = source.read();
+        ch = skipWhitespace(source);
         pos++;
       }
       if (ch == '}') {
