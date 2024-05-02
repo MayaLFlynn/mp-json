@@ -80,7 +80,7 @@ public class Experiments {
   public static void escapeExpt() throws Exception {
     pen.println("escapeExpt()");
 
-    JSONValue parsed = JSON.parse("\"hello \\n\\tworld\""); // "hello \n\tworld"
+    JSONValue parsed = JSON.parse("\"hello\\\\ \\n\\tworld\""); // "hello\\ \n\tworld"
     pen.println(parsed.toString());
     parsed.writeJSON(pen);
 
