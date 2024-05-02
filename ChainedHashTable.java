@@ -169,6 +169,28 @@ public class ChainedHashTable<K,V> implements Iterable<KVPair<K, V>> {
     return (int) result;
   } // hashCode()
 
+  /**
+   * Returns a string representation of this object.
+   */
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("{");
+    Iterator<KVPair<K, V>> contentsIter = this.iterator();
+    while (contentsIter.hasNext()) {
+      KVPair<K, V> pair = contentsIter.next();
+      sb.append(pair.key().toString());
+      sb.append(":");
+      sb.append(pair.value().toString());
+      if (contentsIter.hasNext()) {
+        sb.append(", ");
+      } // if
+    } // while
+    sb.append("}");
+
+    return sb.toString();
+  } // writeJSON(PrintWriter)
+
   // +------------------+--------------------------------------------
   // | Iterator methods |
   // +------------------+

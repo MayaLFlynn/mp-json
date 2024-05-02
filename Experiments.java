@@ -21,7 +21,12 @@ public class Experiments {
     Reader fr = new FileReader(new File("test.json"));
     //Reader fr = new FileReader(new File("stringTest.txt"));
     JSONValue value = JSON.parse(fr);
+
+    pen.println("test writeJSON:");
     value.writeJSON(pen);
+    pen.println();
+
+    pen.println("test toString:");
     pen.println(value.toString());
     pen.println();
     pen.println();
