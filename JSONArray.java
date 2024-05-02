@@ -46,7 +46,10 @@ public class JSONArray implements JSONValue {
    * Compare to another object.
    */
   public boolean equals(Object other) {
-    return this.values.equals(other);
+    if (other instanceof JSONArray) {
+      return this.values.equals(((JSONArray) other).getValue());
+    }
+    return false;
   } // equals(Object)
 
   /**

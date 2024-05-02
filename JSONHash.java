@@ -42,7 +42,27 @@ public class JSONHash implements JSONValue, Iterable<KVPair<JSONString, JSONValu
    * Compare to another object.
    */
   public boolean equals(Object other) {
-    return this.contents.equals(other);
+    if (other instanceof JSONHash) {
+      // check other contains every pair in this
+      JSONHash otherHash = (JSONHash) other;
+      for (KVPair<JSONString, JSONValue> pair : this) {
+        if (!otherHash.contents.containsKey(pair.key())
+            || !otherHash.contents.get(pair.key()).equals(pair.value())) {
+          return false;
+        }
+      }
+      // check this contains every pair in other
+      for (KVPair<JSONString, JSONValue> pair : otherHash) {
+        if (!this.contents.containsKey(pair.key())
+            || !this.contents.get(pair.key()).equals(pair.value())) {
+          return false;
+        }
+      }
+      // we have shown double containment
+      return true;
+    }
+    // wrong type of other
+    return false;
   } // equals(Object)
 
   /**
