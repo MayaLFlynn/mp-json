@@ -10,6 +10,7 @@ Acknowledgements:
 * Skeleton code by SamR
 * `ChainedHashTable.java` contains in-class work worked with David Rhoades
 * `KVPair.java`'s `hashCode()` method taken almost directly from a reading by Professor Osera
+* Javadoc: https://docs.oracle.com/en/java/javase/17/docs/api/index.html
 
 Git Hub link:
 https://github.com/MayaLFlynn/mp-json

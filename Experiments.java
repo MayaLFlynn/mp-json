@@ -3,6 +3,13 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 
+/**
+ * Some experiments for testing our JSON library
+ * 
+ * @author Tim Yu
+ * @author Maya Flynn
+ * @author Amelia Vrieze
+ */
 public class Experiments {
   static PrintWriter pen = new PrintWriter(System.out, true);
 
@@ -15,6 +22,8 @@ public class Experiments {
     //Reader fr = new FileReader(new File("stringTest.txt"));
     JSONValue value = JSON.parse(fr);
     value.writeJSON(pen);
+    pen.println(value.toString());
+    pen.println();
     pen.println();
   }
 
@@ -63,9 +72,23 @@ public class Experiments {
     pen.println();
   }
 
+  public static void escapeExpt() throws Exception {
+    pen.println("escapeExpt()");
+
+    JSONValue parsed = JSON.parse("\"hello \\n\\tworld\""); // "hello \n\tworld"
+    pen.println(parsed.toString());
+    parsed.writeJSON(pen);
+
+    pen.println();
+  }
+
 
   public static void main(String[] args) throws Exception {
     parseExpt();
     equalsExpt();
+    escapeExpt();
+
+    // String test = "\n";
+    // pen.println(test.replace("\n", "\\\\"));
   }
 }

@@ -65,7 +65,18 @@ public class JSONString implements JSONValue {
    * Write the value as JSON.
    */
   public void writeJSON(PrintWriter pen) {
-    pen.print("\"" + this.value.toString() + "\"");
+    String rawString = this.value.toString();
+
+    // change escape characters to text file representation
+    rawString = rawString.replace("\"", "\\\"");
+    rawString = rawString.replace("\\", "\\\\");
+    rawString = rawString.replace("\b", "\\b");
+    rawString = rawString.replace("\f", "\\f");
+    rawString = rawString.replace("\n", "\\n");
+    rawString = rawString.replace("\r", "\\r");
+    rawString = rawString.replace("\t", "\\t");
+
+    pen.print("\"" + rawString + "\"");
     pen.flush();
   } // writeJSON(PrintWriter)
 

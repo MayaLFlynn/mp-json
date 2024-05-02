@@ -108,6 +108,11 @@ public class JSON {
       StringBuilder str = new StringBuilder();
       ch = skipWhitespace(source);
       while (ch != '\"') {
+        // Code to read escape sequences
+        if (ch == '\\') {
+          ch = readEscapeSequence(source);
+        }
+        // End of code to read escape sequences
         str.append((char) ch);
         ch = source.read();
         pos++;
@@ -207,5 +212,32 @@ public class JSON {
   static boolean isWhitespace(int ch) {
     return (' ' == ch) || ('\n' == ch) || ('\r' == ch) || ('\t' == ch);
   } // isWhiteSpace(int)
+
+  /**
+   * Returns escape sequence character by reading next character from source after having already
+   * read backslash from source
+   */
+  static int readEscapeSequence(Reader source) throws ParseException, IOException {
+    int escNext = source.read();
+    pos++;
+    switch (escNext) {
+      case '\"':
+        return '\"';
+      case '\\':
+        return '\\';
+      case '/':
+        return '/';
+      case 'b':
+        return '\b';
+      case 'f':
+        return '\f';
+      case 'n':
+        return '\n';
+      case 't':
+        return '\t';
+      default:
+        throw new ParseException("Invalid escape sequence", pos);
+    }
+  }
 
 } // class JSON
